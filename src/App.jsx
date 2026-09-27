@@ -37,6 +37,7 @@ export default function App() {
   const [showGoal, setShowGoal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [searchClearToken, setSearchClearToken] = useState(0); // limpa a busca
 
   // GET summary + entries do dia selecionado.
   const refresh = useCallback(async () => {
@@ -74,6 +75,7 @@ export default function App() {
         consumed_on: date,
       });
       setSelectedProduct(null);
+      setSearchClearToken((t) => t + 1); // recolhe os resultados da busca
       setPage(1);
       await refresh();
     } catch (err) {
@@ -130,12 +132,25 @@ export default function App() {
     <div className="app">
       <header className="header">
         <div className="brand">
-          <div className="logo">🥗</div>
+          <div className="logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M20 4c0 8-4.5 13-11 13-1 0-2-.15-3-.45C6.8 10.5 12 6 20 4Z"
+                fill="currentColor"
+                fillOpacity="0.92"
+              />
+              <path
+                d="M5 20c1.5-6 5.5-10 11-12"
+                stroke="#fff"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeOpacity="0.9"
+              />
+            </svg>
+          </div>
           <div>
             <h1>NutriTrack</h1>
-            <div className="muted" style={{ fontSize: "0.85rem" }}>
-              Seu diário alimentar
-            </div>
+            <div className="sub">Seu diário alimentar</div>
           </div>
         </div>
         <div className="date-picker">
@@ -157,7 +172,7 @@ export default function App() {
 
       <div className="grid grid-2">
         <Dashboard summary={summary} />
-        <Search onPick={setSelectedProduct} />
+        <Search onPick={setSelectedProduct} clearToken={searchClearToken} />
       </div>
 
       <div style={{ marginTop: 20 }}>

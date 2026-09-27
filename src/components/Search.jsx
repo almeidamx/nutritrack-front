@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { searchProducts } from "../api";
 
 // Busca de produtos. IMPORTANTE: submit explicito (botao / Enter), sem
@@ -13,13 +13,28 @@ function macroLine(p) {
   )} · G ${fmt(p.fat_100g, "g")}  (por ${p.nutrition_basis})`;
 }
 
-export default function Search({ onPick }) {
+export default function Search({ onPick, clearToken }) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [offDown, setOffDown] = useState(false);
   const [searched, setSearched] = useState(false);
+
+  function clearSearch() {
+    setResults([]);
+    setQ("");
+    setSearched(false);
+    setOffDown(false);
+    setError("");
+  }
+
+  // O App incrementa clearToken depois de um registro ser adicionado com
+  // sucesso; a busca entao "recolhe" sozinha.
+  useEffect(() => {
+    if (clearToken) clearSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clearToken]);
 
   async function submit(e) {
     e.preventDefault();
@@ -58,6 +73,15 @@ export default function Search({ onPick }) {
       {offDown && (
         <div className="notice info">
           A Open Food Facts está indisponível no momento. Tente novamente em instantes.
+        </div>
+      )}
+
+      {results.length > 0 && (
+        <div className="results-head">
+          <span className="muted">{results.length} resultado(s)</span>
+          <button type="button" className="ghost small" onClick={clearSearch}>
+            Limpar
+          </button>
         </div>
       )}
 

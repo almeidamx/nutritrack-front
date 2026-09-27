@@ -14,9 +14,9 @@ import {
 // comparando consumido x meta. E o extra de criatividade do Cenario 1.
 
 const MACROS = [
-  { key: "proteins", label: "Proteínas", color: "#3b82f6", unit: "g" },
-  { key: "carbohydrates", label: "Carboidratos", color: "#f59e0b", unit: "g" },
-  { key: "fat", label: "Gorduras", color: "#ef4444", unit: "g" },
+  { key: "proteins", label: "Proteínas", color: "#3f6fce", unit: "g" },
+  { key: "carbohydrates", label: "Carboidratos", color: "#d0912f", unit: "g" },
+  { key: "fat", label: "Gorduras", color: "#cd5f52", unit: "g" },
 ];
 
 function CalorieRing({ consumed, goal }) {
@@ -28,10 +28,10 @@ function CalorieRing({ consumed, goal }) {
   return (
     <div className="cal-ring">
       <svg width="140" height="140" viewBox="0 0 140 140">
-        <circle cx="70" cy="70" r={radius} fill="none" stroke="#eef0f3" strokeWidth="12" />
+        <circle cx="70" cy="70" r={radius} fill="none" stroke="#efece7" strokeWidth="12" />
         <circle
           cx="70" cy="70" r={radius} fill="none"
-          stroke={over ? "#dc2626" : "#16a34a"} strokeWidth="12" strokeLinecap="round"
+          stroke={over ? "#c0392b" : "#15734a"} strokeWidth="12" strokeLinecap="round"
           strokeDasharray={circumference} strokeDashoffset={offset}
           transform="rotate(-90 70 70)"
         />
@@ -70,7 +70,7 @@ export default function Dashboard({ summary }) {
   const { consumed, goal, entries_count } = summary;
 
   const chartData = [
-    { name: "Kcal", Consumido: consumed.energy_kcal, Meta: goal.energy_kcal, color: "#16a34a" },
+    { name: "Kcal", Consumido: consumed.energy_kcal, Meta: goal.energy_kcal, color: "#15734a" },
     ...MACROS.map((m) => ({
       name: m.label,
       Consumido: consumed[m.key],
@@ -109,7 +109,7 @@ export default function Dashboard({ summary }) {
             <YAxis tick={{ fontSize: 12 }} />
             <Tooltip />
             <Legend />
-            <Bar dataKey="Meta" fill="#d1d5db" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Meta" fill="#e4e0d9" radius={[4, 4, 0, 0]} />
             <Bar dataKey="Consumido" radius={[4, 4, 0, 0]}>
               {chartData.map((d, i) => (
                 <Cell key={i} fill={d.color} />
