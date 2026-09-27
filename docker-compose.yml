@@ -1,0 +1,36 @@
+# docker-compose do NutriTrack — vive na RAIZ do repo do front (componente
+# principal), conforme o enunciado. Sobe as DUAS componentes:
+#
+#   - api:   a API Flask (buildada a partir do repo irmao ../nutritrack-api)
+#   - front: o React servido por nginx, que faz proxy de /api para a api
+#
+# Pre-requisito: clonar os dois repos lado a lado:
+#   git clone https://github.com/almeidamx/nutritrack-front
+#   git clone https://github.com/almeidamx/nutritrack-api
+#   cd nutritrack-front && docker compose up --build
+#
+# Depois:
+#   - Front:   http://localhost:8080
+#   - Swagger: http://localhost:5000/openapi/swagger
+
+services:
+  api:
+    build: ../nutritrack-api
+    environment:
+      - DATABASE_URL=sqlite:////data/nutritrack.db
+    volumes:
+      - nutritrack_data:/data
+    ports:
+      - "5000:5000" # exposto para mostrar o Swagger no video
+    restart: unless-stopped
+
+  front:
+    build: .
+    depends_on:
+      - api
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+volumes:
+  nutritrack_data:
