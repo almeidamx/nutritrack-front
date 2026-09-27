@@ -13,9 +13,15 @@
 #   - Front:   http://localhost:8080
 #   - Swagger: http://localhost:5000/openapi/swagger
 
+# Nome do projeto (o grupo que aparece no Docker Desktop). Sem isto, o Compose
+# usaria o nome da pasta ("nutritrack-front"), o que daria a impressao de ser so
+# o container do front — quando na verdade o stack tem as duas componentes.
+name: nutritrack
+
 services:
   api:
     build: ../nutritrack-api
+    container_name: nutritrack-api
     environment:
       - DATABASE_URL=sqlite:////data/nutritrack.db
     volumes:
@@ -26,6 +32,7 @@ services:
 
   front:
     build: .
+    container_name: nutritrack-front
     depends_on:
       - api
     ports:
